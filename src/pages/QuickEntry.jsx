@@ -22,7 +22,7 @@ export default function QuickEntry() {
 
   return (
     <form className="panel entry" onSubmit={handleSubmit}>
-      <h3>Новое измерение</h3>
+      <h2>Новое измерение</h2>
       <label htmlFor="glucose">Глюкоза, ммоль/л</label>
       <input
         id="glucose"

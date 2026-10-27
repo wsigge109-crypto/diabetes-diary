@@ -26,7 +26,7 @@ function Chart({ entries }) {
   const line = points.map((p, i) => `${x(i)},${y(p.glucose)}`).join(' ');
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="chart__svg" role="img" aria-label="График глюкозы за 7 дней">
+    <svg viewBox={`0 0 ${W} ${H}`} width="600" height="200" className="chart__svg" role="img" aria-label="График глюкозы за 7 дней">
       <polyline points={line} fill="none" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinejoin="round" />
       {points.map((p, i) => (
         <circle key={p.id} cx={x(i)} cy={y(p.glucose)} r="3.5" fill="var(--color-primary)" />
@@ -78,12 +78,12 @@ export default function Home() {
 
       <section className="grid">
         <div className="panel chart">
-          <h3>Глюкоза за 7 дней</h3>
+          <h2>Глюкоза за 7 дней</h2>
           <Chart entries={weekEntries} />
         </div>
 
         <div className="panel recent">
-          <h3>Последние записи</h3>
+          <h2>Последние записи</h2>
           <ul>
             {entries.slice(0, 6).map((e) => {
               const ok = checkRange(e.glucose, ranges[e.context]);

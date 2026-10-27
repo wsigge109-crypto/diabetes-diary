@@ -2,7 +2,7 @@ export default function AuthLayout({ heading, text, children }) {
   return (
     <div className="auth">
       <aside className="auth__side">
-        <h1>{heading}</h1>
+        <p className="auth__brand">{heading}</p>
         <p>{text}</p>
         <svg className="auth__wave" viewBox="0 0 160 40" aria-hidden="true">
           <polyline

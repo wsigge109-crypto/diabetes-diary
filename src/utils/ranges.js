@@ -6,8 +6,7 @@ export const CONTEXTS = [
   { id: 'bedtime', label: 'Перед сном' },
 ];
 
-// Целевые диапазоны по умолчанию (ммоль/л), как в макете.
-// Для «До еды» диапазон не задан — запись просто не оценивается.
+
 export const DEFAULT_RANGES = {
   fasting: { hint: 'Утренние измерения', min: 4.0, max: 7.0 },
   after_meal: { hint: 'Через 2 часа', min: null, max: 9.0 },
@@ -18,7 +17,7 @@ export function contextLabel(id) {
   return CONTEXTS.find((c) => c.id === id)?.label ?? id;
 }
 
-// true — в диапазоне, false — вне диапазона, null — диапазон не задан
+
 export function checkRange(value, range) {
   if (!range) return null;
   const okMin = range.min == null || value >= range.min;

@@ -1,12 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout.jsx';
+import Seo from '../components/Seo.jsx';
+import { PAGE_SEO } from '../utils/seo.js';
 
 export default function Login() {
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    // Настоящая авторизация появится вместе с backend
+   
     navigate('/');
   }
 
@@ -15,7 +17,8 @@ export default function Login() {
       heading="Дневник самоконтроля диабета"
       text="Отслеживайте глюкозу, инсулин и питание в одном месте."
     >
-      <h2>Вход в аккаунт</h2>
+      <Seo {...PAGE_SEO['/login']} />
+      <h1>Вход в аккаунт</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" required autoComplete="email" />

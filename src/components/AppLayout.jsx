@@ -1,4 +1,6 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import Seo from './Seo.jsx';
+import { PAGE_SEO } from '../utils/seo.js';
 
 const LINKS = [
   { to: '/', label: 'Главная' },
@@ -15,8 +17,11 @@ export default function AppLayout() {
   const { pathname } = useLocation();
   const current = LINKS.find((l) => l.to === pathname);
 
+  const seo = PAGE_SEO[pathname] ?? PAGE_SEO['/'];
+
   return (
     <div className="app">
+      <Seo {...seo} />
       <nav className="sidebar" aria-label="Основное меню">
         <div className="sidebar__logo">Дневник</div>
         <ul>
@@ -41,7 +46,7 @@ export default function AppLayout() {
 
       <div className="content">
         <header className="topbar">
-          <h2>{current ? current.label : 'Дневник'}</h2>
+          <h1>{current ? current.label : 'Дневник'}</h1>
           <span className="topbar__avatar" aria-hidden="true" />
         </header>
         <main className="page">

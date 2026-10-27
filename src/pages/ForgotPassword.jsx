@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout.jsx';
+import Seo from '../components/Seo.jsx';
+import { PAGE_SEO } from '../utils/seo.js';
 
 export default function ForgotPassword() {
   const [sent, setSent] = useState(false);
@@ -12,7 +14,8 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout heading="Забыли пароль?" text="Отправим ссылку для сброса на вашу почту.">
-      <h2>Восстановление пароля</h2>
+      <Seo {...PAGE_SEO['/forgot']} />
+      <h1>Восстановление пароля</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input id="email" type="email" required autoComplete="email" />

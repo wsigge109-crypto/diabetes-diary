@@ -1,0 +1,26 @@
+User-agent: *
+Disallow: /login
+Disallow: /register
+Disallow: /forgot
+Disallow: /profile/
+Disallow: /settings
+Disallow: /diary
+Disallow: /analytics
+Disallow: /reminders
+Disallow: /quick
+Disallow: /ranges
+
+User-agent: Yandex
+Disallow: /login
+Disallow: /register
+Disallow: /forgot
+Disallow: /profile/
+Disallow: /settings
+Disallow: /diary
+Disallow: /analytics
+Disallow: /reminders
+Disallow: /quick
+Disallow: /ranges
+Clean-param: utm_source&utm_medium&utm_campaign
+
+Sitemap: https://example.com/sitemap.xml

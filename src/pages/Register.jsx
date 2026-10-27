@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout.jsx';
+import Seo from '../components/Seo.jsx';
+import { PAGE_SEO } from '../utils/seo.js';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -22,7 +24,8 @@ export default function Register() {
       heading="Начните вести дневник"
       text="Займёт меньше двух минут — доступ с любого устройства."
     >
-      <h2>Регистрация</h2>
+      <Seo {...PAGE_SEO['/register']} />
+      <h1>Регистрация</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Имя</label>
         <input id="name" name="name" type="text" required autoComplete="name" />
