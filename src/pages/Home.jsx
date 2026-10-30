@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getEntries, getRanges } from '../utils/storage.js';
 import { checkRange, contextLabel } from '../utils/ranges.js';
@@ -36,8 +37,19 @@ function Chart({ entries }) {
 }
 
 export default function Home() {
-  const entries = getEntries();
-  const ranges = getRanges();
+  const [data, setData] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    Promise.all([getEntries(), getRanges()])
+      .then(([entries, ranges]) => setData({ entries, ranges }))
+      .catch((err) => setError(err.message));
+  }, []);
+
+  if (error) return <p className="error" role="alert">{error}</p>;
+  if (!data) return <p className="muted">Загрузка…</p>;
+
+  const { entries, ranges } = data;
   const weekEntries = entries.filter((e) => Date.now() - new Date(e.datetime).getTime() <= 7 * DAY);
 
   const current = entries[0];
