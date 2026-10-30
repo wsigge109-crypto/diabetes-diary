@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getRanges, saveRanges } from '../utils/storage.js';
 import { CONTEXTS, DEFAULT_RANGES, formatRange } from '../utils/ranges.js';
 
@@ -24,10 +24,15 @@ function parseValue(str) {
 }
 
 export default function Ranges() {
-  const [ranges, setRanges] = useState(getRanges);
+  const [ranges, setRanges] = useState(DEFAULT_RANGES);
   const [editing, setEditing] = useState(false);
-  const [draft, setDraft] = useState(() => toDraft(getRanges()));
+  const [draft, setDraft] = useState(() => toDraft(DEFAULT_RANGES));
   const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    getRanges().then(setRanges).catch((err) => setError(err.message));
+  }, []);
 
   function startEdit() {
     setDraft(toDraft(ranges));
@@ -35,7 +40,7 @@ export default function Ranges() {
     setEditing(true);
   }
 
-  function handleSave() {
+  async function handleSave() {
     const next = {};
     for (const c of RANGE_CONTEXTS) {
       const min = parseValue(draft[c.id].min);
@@ -54,10 +59,16 @@ export default function Ranges() {
       }
       next[c.id] = { hint: DEFAULT_RANGES[c.id].hint, min, max };
     }
-    saveRanges(next);
-    setRanges(next);
-    setEditing(false);
-    setError('');
+    setSaving(true);
+    try {
+      setRanges(await saveRanges(next));
+      setEditing(false);
+      setError('');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   function setField(id, field, value) {
@@ -71,7 +82,7 @@ export default function Ranges() {
         {editing ? (
           <div className="ranges__actions">
             <button type="button" className="btn" onClick={() => setEditing(false)}>Отмена</button>
-            <button type="button" className="btn btn--primary" onClick={handleSave}>Сохранить</button>
+            <button type="button" className="btn btn--primary" onClick={handleSave} disabled={saving}>Сохранить</button>
           </div>
         ) : (
           <button type="button" className="btn" onClick={startEdit}>Изменить</button>

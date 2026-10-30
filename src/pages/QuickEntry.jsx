@@ -9,15 +9,19 @@ export default function QuickEntry() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const value = parseFloat(glucose.replace(',', '.'));
     if (Number.isNaN(value) || value < 1 || value > 35) {
       setError('Введите значение от 1 до 35 ммоль/л');
       return;
     }
-    addEntry({ glucose: Math.round(value * 10) / 10, context });
-    navigate('/');
+    try {
+      await addEntry({ glucose: Math.round(value * 10) / 10, context });
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (

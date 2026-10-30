@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../components/AuthLayout.jsx';
 import Seo from '../components/Seo.jsx';
 import { PAGE_SEO } from '../utils/seo.js';
+import { register } from '../utils/storage.js';
 
 export default function Register() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const form = new FormData(e.target);
     if (form.get('password') !== form.get('password2')) {
@@ -16,7 +18,15 @@ export default function Register() {
       return;
     }
     setError('');
-    navigate('/');
+    setLoading(true);
+    try {
+      await register({ name: form.get('name'), email: form.get('email'), password: form.get('password') });
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -36,7 +46,7 @@ export default function Register() {
         <label htmlFor="password2">Повторите пароль</label>
         <input id="password2" name="password2" type="password" required autoComplete="new-password" />
         {error && <p className="error" role="alert">{error}</p>}
-        <button type="submit" className="btn btn--primary btn--block">Зарегистрироваться</button>
+        <button type="submit" className="btn btn--primary btn--block" disabled={loading}>Зарегистрироваться</button>
       </form>
       <p className="auth__note">
         Уже есть аккаунт? <Link to="/login">Войти</Link>

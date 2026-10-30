@@ -1,42 +1,43 @@
-import { DEFAULT_RANGES } from './ranges.js';
+import { api, setToken } from './api.js';
 
-const ENTRIES_KEY = 'diary_entries';
-const RANGES_KEY = 'diary_ranges';
+export async function register({ name, email, password }) {
+  const data = await api('/api/auth/register', { method: 'POST', body: { name, email, password } });
+  setToken(data.access_token);
+  return data.user;
+}
 
-function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+export async function login({ email, password }) {
+  const data = await api('/api/auth/login', { method: 'POST', body: { email, password } });
+  setToken(data.access_token);
+  return data.user;
+}
+
+export function logout() {
+  setToken(null);
+}
+
+export function requestPasswordReset(email) {
+  return api('/api/auth/forgot', { method: 'POST', body: { email } });
+}
+
+export function getMe() {
+  return api('/api/auth/me');
 }
 
 export function getEntries() {
-  try {
-    const data = JSON.parse(localStorage.getItem(ENTRIES_KEY));
-    return Array.isArray(data) ? data : [];
-  } catch {
-    return [];
-  }
+  return api('/api/entries');
 }
 
 export function addEntry({ glucose, context }) {
-  const entry = {
-    id: makeId(),
-    datetime: new Date().toISOString(),
-    glucose,
-    context,
-  };
-  const all = [entry, ...getEntries()];
-  localStorage.setItem(ENTRIES_KEY, JSON.stringify(all));
-  return entry;
+  return api('/api/entries', { method: 'POST', body: { glucose, context } });
 }
 
 export function getRanges() {
-  try {
-    const data = JSON.parse(localStorage.getItem(RANGES_KEY));
-    return data && typeof data === 'object' ? data : DEFAULT_RANGES;
-  } catch {
-    return DEFAULT_RANGES;
-  }
+  return api('/api/ranges');
 }
 
 export function saveRanges(ranges) {
-  localStorage.setItem(RANGES_KEY, JSON.stringify(ranges));
+  const body = {};
+  for (const [id, r] of Object.entries(ranges)) body[id] = { min: r.min, max: r.max };
+  return api('/api/ranges', { method: 'PUT', body });
 }

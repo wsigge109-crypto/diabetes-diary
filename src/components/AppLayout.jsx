@@ -1,6 +1,8 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom';
 import Seo from './Seo.jsx';
 import { PAGE_SEO } from '../utils/seo.js';
+import { getToken } from '../utils/api.js';
+import { logout } from '../utils/storage.js';
 
 const LINKS = [
   { to: '/', label: 'Главная' },
@@ -18,6 +20,8 @@ export default function AppLayout() {
   const current = LINKS.find((l) => l.to === pathname);
 
   const seo = PAGE_SEO[pathname] ?? PAGE_SEO['/'];
+
+  if (!getToken()) return <Navigate to="/login" replace />;
 
   return (
     <div className="app">
@@ -39,7 +43,7 @@ export default function AppLayout() {
             </li>
           ))}
         </ul>
-        <NavLink to="/login" className="sidebar__logout">
+        <NavLink to="/login" className="sidebar__logout" onClick={logout}>
           Выйти
         </NavLink>
       </nav>

@@ -11,3 +11,4 @@ dist-ssr
 .env.*
 npm-debug.log*
 .DS_Store
+backend
